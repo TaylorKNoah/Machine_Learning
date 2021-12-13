@@ -1,0 +1,2 @@
+# no swap files of any type (.swp, .swo, etc)
+.*.sw*
