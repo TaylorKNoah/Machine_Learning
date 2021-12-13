@@ -12,7 +12,7 @@
 ---
 
 List of models to create:  
-- [ ] Basic logic gate perceptrons
+- [ ] Perceptrons for logic gates
   - [ ] Not
   - [ ] And
   - [ ] Nand
