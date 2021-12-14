@@ -1,2 +1,6 @@
 # no swap files of any type (.swp, .swo, etc)
 .*.sw*
+
+# no env
+*env*
+~/env
