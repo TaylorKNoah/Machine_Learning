@@ -1,5 +1,6 @@
 from random import randint as rand
 from os import exists
+from math import exp
 
 class Perceptron_OR_Gate:
 
@@ -75,9 +76,17 @@ class Perceptron_OR_Gate:
         self.inputs[1] = example[0]
         self.inputs[2] = example[1]
 
-        # compute XW
+        # compute XW + W_0
         self.output = 0
         for i in range(3):
             self.output += (self.inputs[i] * self.weights[i])
-        
+    
+    def sigma(self, z):
+        s1 = 0 - z
+        s2 = exp(s1)
+        s3 = 1 + s2
+        s4 = 1 / s3
+        return s4
+
+         
 
