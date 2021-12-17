@@ -6,7 +6,7 @@ from matplotlib import pyplot as plt
 class Perceptron_OR_Gate:
 
     def __init__(self):
-        self.Gamma = 0.1
+        self.Eta = 0.2
 
         self.inputs = [1,0,0]
         self.weights = [0,0,0]
@@ -53,10 +53,10 @@ class Perceptron_OR_Gate:
     
     def save_weights(self):
         # find unused file name
-        savefile = "Perceptron_Weights_OR_"+str(self.weight_file_num)
+        savefile = "Perceptron_Weights_OR_"+str(self.weight_file_num) +".txt"
         while exists(savefile):
             self.weight_file_num += 1
-            savefile = "Perceptron_Weights_OR_"+str(self.weight_file_num)
+            savefile = "Perceptron_Weights_OR_"+str(self.weight_file_num)+".txt"
         
         # save weights to unused file
         with open (savefile, "w") as File:
@@ -76,30 +76,40 @@ class Perceptron_OR_Gate:
         # 1) get inputs
         # 2) forward propagate
         # 3) if incorrect output: Backpropagate
-        # 4) Backpropagate
-        # 5) Finish when all training examples sent through perceptron
+        # 4) Finish when all training examples sent through perceptron
 
         # 0)
         if self.Weight_File == None:
             self.init_weights()
+            self.save_weights()
         else:
             self.load_weights()
 
-        # example: [input, input, target_output]
         i = -1
-        #for example in self.Training_Data:
-        for k in range(10):
+        #1)
+        for example in self.Training_Data:
+        # example: [input, input, target_output]
+        #for k in range(10):
             i += 1
-            # 1)
-            #self.forward_propagate(example)
-            self.forward_propagate(self.Training_Data[i])
 
-            print("\n\nExample "+str(i)+"): "
-            +"\nInput: "+str(self.Training_Data[i][0])+", "+str(self.Training_Data[i][1])
-            +"\nTarget: "+str(self.Training_Data[i][2])
-            +"\nOutput: "+str(self.output))
+            # 2)
+            self.forward_propagate(example)
+            #self.forward_propagate(self.Training_Data[i])
+
+            #print("\n\nExample "+str(i)+"): "
+            #+"\nInput: "+str(self.Training_Data[i][0])+", "+str(self.Training_Data[i][1])
+            #+"\nTarget: "+str(self.Training_Data[i][2])
+            #+"\nOutput: "+str(self.output))
+
+            #print("\n\nExample "+str(i)+"): "
+            #+"\nInput: "+str(example[0])+", "+str(example[1])
+            #+"\nTarget: "+str(example[2])
+            #+"\nOutput: "+str(self.output))
         
-            self.compute_accuracy(self.output, self.Training_Data[i][2])
+            self.compute_accuracy(self.output, example[2])
+
+            if self.output != example[2]:
+                self.back_propagate(self.output, example[2])
 
     def forward_propagate(self, example):
         # load inputs
@@ -119,10 +129,24 @@ class Perceptron_OR_Gate:
             self.output = 0
         else:
             self.output = 1
+        
+        
+    
+    def back_propagate(self, output, target):
+        # update weights
+        # weight_i+1 = weight_i + eta * (output - target) * input_i
+        d1 = self.Eta
+        d2 = output - target
+        for i in range(len(self.inputs)):
+            d3 = self.inputs[i]
+            delta = d1 * d2 * d3
+            self.weights[i] -= delta
     
     def sigma(self, z):
         # outputs 0 < x < 1
         s1 = 0 - z
+        if s1 > 700:
+            s1 = 700
         s2 = exp(s1)
         s3 = 1 + s2
         s4 = 1 / s3
@@ -151,7 +175,8 @@ class Perceptron_OR_Gate:
 
 #testing
 perceptron = Perceptron_OR_Gate()
-perceptron.load_data("TRAINING", "training_data_OR_100.txt")
-perceptron.Weight_File = "Perceptron_Weights_OR_0"
+perceptron.load_data("TRAINING", "training_data_OR_1000.txt")
+perceptron.Weight_File = "Perceptron_Weights_OR_0.txt"
 perceptron.Train_Perceptron()
+perceptron.save_weights()
 perceptron.graph_training_accuracy()
