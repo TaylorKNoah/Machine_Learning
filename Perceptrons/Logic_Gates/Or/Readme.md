@@ -9,5 +9,7 @@ Method
 - Hidden Layer: None
 - Output Layer: 1 output.
 - Activation function: Sigmoid
-  - S(x) = 1 / (1+e^-x)
+  - `a = S(x) = 1 / (1+e^-x)`
+- Threshold: `0 < a < 0.5`
 - Using Stochastic Gradient Descent for Backpropagation
+  - Update weigts after each training example
