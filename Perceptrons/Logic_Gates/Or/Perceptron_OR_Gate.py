@@ -6,7 +6,7 @@ from matplotlib import pyplot as plt
 class Perceptron_OR_Gate:
 
     def __init__(self):
-        self.Eta = 0.2
+        self.Eta = 0.1
 
         self.inputs = [1,0,0]
         self.weights = [0,0,0]
@@ -21,6 +21,11 @@ class Perceptron_OR_Gate:
         self.training_correct = 0
         self.training_total = 0
         self.accuracies = []
+
+        # decision boundary intercepts for all 
+        # remembered dbs
+        self.db_x_coords = []
+        self.db_y_coords = []
         return
 
     def load_data(self, TYPE, FILE):
@@ -71,14 +76,6 @@ class Perceptron_OR_Gate:
                 i += 1
 
     def Train_Perceptron(self):
-        # method
-        # 0) init weights randomly
-        # 1) get inputs
-        # 2) forward propagate
-        # 3) if incorrect output: Backpropagate
-        # 4) Finish when all training examples sent through perceptron
-
-        # 0)
         if self.Weight_File == None:
             self.init_weights()
             self.save_weights()
@@ -86,27 +83,25 @@ class Perceptron_OR_Gate:
             self.load_weights()
 
         i = -1
-        #1)
         for example in self.Training_Data:
+            if len(self.accuracies) > 1:
+                x = self.accuracies[-1] - self.accuracies[-2]
+                if x < 0:
+                    x = x * -1
+                if x < 0.0001:
+                    print("\n\nEpoch "+str(i)+") Acc: "+str(self.accuracies[-1])+"%")
+                    return
+
         # example: [input, input, target_output]
-        #for k in range(10):
-            i += 1
 
-            # 2)
             self.forward_propagate(example)
-            #self.forward_propagate(self.Training_Data[i])
-
-            #print("\n\nExample "+str(i)+"): "
-            #+"\nInput: "+str(self.Training_Data[i][0])+", "+str(self.Training_Data[i][1])
-            #+"\nTarget: "+str(self.Training_Data[i][2])
-            #+"\nOutput: "+str(self.output))
-
-            #print("\n\nExample "+str(i)+"): "
-            #+"\nInput: "+str(example[0])+", "+str(example[1])
-            #+"\nTarget: "+str(example[2])
-            #+"\nOutput: "+str(self.output))
-        
             self.compute_accuracy(self.output, example[2])
+            self.update_decision_boundary()
+
+            i += 1
+            if i % 25 == 0:
+                print("\n\nEpoch "+str(i)+") Acc: "+str(self.accuracies[-1])+"%")
+        
 
             if self.output != example[2]:
                 self.back_propagate(self.output, example[2])
@@ -168,6 +163,36 @@ class Perceptron_OR_Gate:
         plt.ylabel("Accuracy")
         plt.xlabel("Epoch")
         plt.show()
+    
+    def update_decision_boundary(self):
+        x_coords = [-self.weights[0] / self.weights[2], 0]
+        y_coords = [0, -self.weights[0]/self.weights[1]]
+
+        self.db_x_coords.append(x_coords.copy())
+        self.db_y_coords.append(y_coords.copy())
+
+    def graph_decision_boundary(self):
+        plt.ylim(0,1)
+        plt.xlim(0,1)
+
+        # or data polts
+        or_y = [0,0,1,1]
+        or_x = [0,1,0,1]
+
+
+        fig, ax = plt.subplots()
+        ax.plot(or_x, or_y, 'o')
+
+
+        print("Dbs: "+str(len(self.db_y_coords)))
+        for i in range(50):
+            if i % 10 == 0 or i == 49:
+                ax.plot(self.db_x_coords[i], self.db_y_coords[i], label="DB"+str(i))
+        
+        plt.legend()
+        plt.show()
+
+
 
         
 
@@ -179,4 +204,5 @@ perceptron.load_data("TRAINING", "training_data_OR_1000.txt")
 perceptron.Weight_File = "Perceptron_Weights_OR_0.txt"
 perceptron.Train_Perceptron()
 perceptron.save_weights()
-perceptron.graph_training_accuracy()
+perceptron.graph_decision_boundary()
+#perceptron.graph_training_accuracy()
