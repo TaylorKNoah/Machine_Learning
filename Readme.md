@@ -14,6 +14,7 @@
 List of models to create:  
 - [ ] Perceptrons for logic gates
   - [x] Or
+    - [x] Using a single perceptron 
   - [ ] Xor  
     - [ ] Using Kernal Function
     - [ ] Using Multiple Perceptrons  
