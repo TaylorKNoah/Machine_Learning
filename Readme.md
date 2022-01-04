@@ -13,5 +13,5 @@
 
 List of models to create:  
 - [ ] Perceptrons for logic gates
-  - [ x ] Or
+  - [x] Or
   - [ ] Xor  
