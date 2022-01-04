@@ -13,11 +13,5 @@
 
 List of models to create:  
 - [ ] Perceptrons for logic gates
-  - [ ] Not
-  - [ ] And
-  - [ ] Nand
-  - [ ] Or
-  - [ ] Xor
-  - [ ] Nor
-  - [ ] xnor
-
+  - [ x ] Or
+  - [ ] Xor  
