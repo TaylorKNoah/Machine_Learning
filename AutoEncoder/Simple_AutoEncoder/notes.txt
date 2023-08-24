@@ -1,0 +1,5 @@
+1) Need to track training loss (loss) and validation loss (val_loss)
+    a) save both to file
+    b) create pyplot depicting each to track progress.
+
+2) If I use svd, id that in conjunction with a different model whose output aims to classify and whose input is the encodings?
